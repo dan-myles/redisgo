@@ -15,5 +15,5 @@ func main() {
 		panic(err)
 	}
 
-  conn.Write([]byte("$99"))
+	conn.Write([]byte("+PONG\r\n"))
 }
