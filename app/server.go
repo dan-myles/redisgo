@@ -9,8 +9,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = l.Accept()
+
+	conn, err := l.Accept()
 	if err != nil {
 		panic(err)
 	}
+
+  conn.Write([]byte("$99"))
 }
