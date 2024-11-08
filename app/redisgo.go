@@ -4,6 +4,8 @@ import (
 	"net"
 )
 
+var VALKEY = NewSys()
+
 func main() {
 	l, err := net.Listen("tcp", "0.0.0.0:6379")
 	if err != nil {
@@ -27,8 +29,8 @@ func handle(c net.Conn) {
 
 		_, err := c.Read(buf)
 		if err != nil {
-      c.Close()
-      return
+			c.Close()
+			return
 		}
 
 		l := NewLexer(buf)

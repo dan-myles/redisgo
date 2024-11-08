@@ -35,12 +35,16 @@ func IsCommand(bulk string) bool {
 		return true
 	case I_PING:
 		return true
+	case I_GET:
+		return true
+	case I_SET:
+		return true
 	default:
 		return false
 	}
 }
 
-func RESPFromString(raw string) []byte {
+func RESPBulkFromString(raw string) []byte {
 	var buf bytes.Buffer
 
 	buf.WriteString("$")
@@ -50,4 +54,8 @@ func RESPFromString(raw string) []byte {
 	buf.WriteString("\r\n")
 
 	return buf.Bytes()
+}
+
+func RESPOk() []byte {
+  return []byte("+OK\r\n")
 }

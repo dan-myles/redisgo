@@ -5,6 +5,8 @@ import "net"
 const (
 	I_PING = "PING"
 	I_ECHO = "ECHO"
+	I_SET  = "SET"
+	I_GET  = "GET"
 )
 
 type Parser struct {
@@ -50,15 +52,9 @@ func (p *Parser) parseCommand() {
 		p.ping()
 	case I_ECHO:
 		p.echo()
+	case I_GET:
+  p.get()
+	case I_SET:
+		p.set()
 	}
-}
-
-func (p *Parser) ping() {
-	p.conn.Write([]byte("+PONG\r\n"))
-}
-
-func (p *Parser) echo() {
-	echo := p.lex.GetToken().Second
-  resp := RESPFromString(echo)
-	p.conn.Write(resp)
 }
