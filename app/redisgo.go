@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net"
 )
 
@@ -13,24 +12,27 @@ func main() {
 	defer l.Close()
 
 	for {
-		c, err := l.Accept()
+		conn, err := l.Accept()
 		if err != nil {
 			panic(err)
 		}
 
-		go handle(c)
+		go handle(conn)
 	}
 }
 
 func handle(c net.Conn) {
 	for {
-		buf := make([]byte, 256)
+		buf := make([]byte, 512)
 
 		_, err := c.Read(buf)
 		if err != nil {
-			fmt.Printf("there was an error: %s", err.Error())
+      c.Close()
+      return
 		}
 
-		c.Write([]byte("+PONG\r\n"))
+		l := NewLexer(buf)
+		p := NewParser(c, l)
+		p.parseRequest()
 	}
 }
