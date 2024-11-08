@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -35,6 +36,7 @@ func handle(c net.Conn) {
 
 		l := NewLexer(buf)
 		p := NewParser(c, l)
+		fmt.Printf("\nORIGINAL: \n%s", PrettyPrintBytes(buf))
 		p.parseRequest()
 	}
 }

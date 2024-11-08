@@ -59,3 +59,7 @@ func RESPBulkFromString(raw string) []byte {
 func RESPOk() []byte {
   return []byte("+OK\r\n")
 }
+
+func RESPNull() []byte {
+  return []byte("$-1\r\n")
+}

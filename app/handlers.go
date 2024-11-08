@@ -1,5 +1,10 @@
 package main
 
+import (
+	"strconv"
+	"time"
+)
+
 func (p *Parser) ping() {
 	p.conn.Write([]byte("+PONG\r\n"))
 }
@@ -15,12 +20,30 @@ func (p *Parser) set() {
 	val := p.lex.GetToken().Second
 	VALKEY.Set(key, val)
 
+	if p.lex.Peek().Second == "px" {
+		p.lex.GetToken()
+		raw := p.lex.GetToken().Second
+
+		expr, _ := strconv.Atoi(raw)
+		ms := time.Duration(expr) * time.Millisecond
+
+		go func() {
+			time.Sleep(ms)
+			VALKEY.Delete(key)
+		}()
+	}
+
 	p.conn.Write(RESPOk())
 }
 
 func (p *Parser) get() {
 	key := p.lex.GetToken().Second
-	val := VALKEY.Get(key)
+	val, ok := VALKEY.Get(key)
+
+	if !ok {
+		p.conn.Write(RESPNull())
+		return
+	}
 
 	p.conn.Write(RESPBulkFromString(val))
 }

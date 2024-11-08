@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 var (
 	String  byte = '+'
 	Bulk    byte = '$'
@@ -16,6 +18,7 @@ const (
 	T_INTEGER     = "INTEGER"
 	T_ARRAY       = "ARRAY"
 	T_ERROR       = "ERROR"
+	T_EOF         = "EOF"
 )
 
 type Token Pair[string, string]
@@ -44,7 +47,8 @@ func (l *Lexer) GetToken() Token {
 	case Bulk:
 		return l.bulk()
 	default:
-		panic("PROTOCOL ERR: unpexpected token type")
+		fmt.Printf("HORRIBLE THING IN GET TOKEN")
+		return Token{First: T_EOF, Second: ""}
 	}
 }
 
